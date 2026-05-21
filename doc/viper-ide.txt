@@ -1,0 +1,219 @@
+*viper-ide.txt*                                           Viper IDE for Neovim
+
+                                       Type |gO| to see the table of contents.
+
+==============================================================================
+INTRODUCTION                                                       *viper-ide*
+
+This plugin is supposed to be the analogue for the official Viper IDE for VS
+Code, just for Neovim instead. It provides an LSP configuration with a
+verification command.
+
+==============================================================================
+USER COMMANDS                                             *viper-ide-commands*
+
+:LspViperVerify                                                   *:LspVerify*
+
+Start the verification of the current buffer.
+
+==============================================================================
+LSP COMMAND PROTOCOL                                         *viper-ide-proto*
+
+Note: This is an unofficial documentation of the non-standard LSP commands of
+the ViperServer language server (in lua-y notation). The information contained
+here is simply how I think the protocol works from reading the source code of
+the server and is solely used to document what this implementation assumes the
+protocol to be.
+
+From what I've been able to piece together, the source of truth for these is
+the file 'ViperProtocol.ts' in the code of the official Viper IDE repository,
+from which most of the information in this section is sourced.
+
+CLIENT-TO-SERVER-COMMANDS                                *viper-ide-proto-c2s*
+
+GetVersion (Request) ~
+
+Request by the client to perform a compatibility check.
+
+Request: >lua
+    {
+        -- Version of the client.
+        ---@type string
+        clientVersion = ""
+    }
+<
+Response: >lua
+    {
+        -- Version of the server.
+        ---@type string
+        serverVersion = ""
+        -- Error message if client is not supported by server, nil otherwise.
+        ---@type string?
+        error = ""
+    }
+<
+Verify (Notification) ~
+
+Notification by the client to start verification for a file.
+
+Notification: >lua
+    {
+        -- File to verify.
+        ---@type string
+        uri = "",
+        -- Contents of the file to verify.
+        ---@type string
+        content = "",
+        -- Was the verification triggered manually?
+        ---@type boolean
+        manuallyTriggered = false,
+        -- The path to the open workspace folder.
+        ---@type string
+        workspace = "",
+        -- The backend to use. Either "silicon" or "carbon".
+        ---@type string
+        backend = "",
+        -- Contains the path of the fild that should be verified.
+        -- (TODO what??)
+        ---@type string
+        customArgs = ""
+    }
+<
+StopVerification (Request) ~
+
+Request by the client to abort the running verification.
+
+Request: >lua
+    {
+        -- The URI of the file to stop verifying.
+        ---@type string
+        uri = "string"
+    }
+<
+Response: >lua
+    {
+        -- Whether or not the stopping worked.
+        ---@type boolean
+        success = false
+    }
+<
+GetLanguageServerUrl (Request) ~
+
+Request by the client for the URL of the language server.
+
+Request: >lua
+    {
+        -- Not implemented. So I assume no parameters need to be passed.
+    }
+<
+Response: >lua
+    {
+        -- The server URL.
+        ---@type string
+        url = ""
+    }
+<
+RemoveDiagnostics (Request) ~
+
+Request by the client to remove the diagnostics in a file.
+
+Request: >lua
+    {
+        -- The file URI from which to remove the diagnostics. If this is nil,
+        -- then the server will remove the diagnostics from all files.
+        ---@type string?
+        uri = ""
+    }
+<
+
+Response: >lua
+    {
+        -- Whether nor not the removal worked.
+        ---@type boolean
+        success = false
+    }
+<
+FlushCache (Request) ~
+
+Request by the client that the server cache be flushed.
+
+Request: >lua
+    {
+        -- The file to flush the cache for. If this is nil, then the server
+        -- will flush the cache for all files.
+        ---@type string?
+        uri = "",
+        -- The backend for which to flush the cache.
+        ---@type string
+        backend = "",
+    }
+
+Response: >lua
+    {
+        -- Not implemented. So I assume no response will be received.
+        -- (TODO why in the name of all that is holy is this a request then?)
+    }
+<
+SERVER-TO-CLIENT-COMMANDS                                *viper-ide-proto-s2c*
+
+StateChange (Notification) ~
+
+Notification by the server about a state change. See |viper-ide-proto-cstate|.
+
+Notification: >lua
+    {
+        -- The new verification state number.
+        ---@type number
+        newState = 0,
+        -- The new verification progress,
+        -- (TODO in what format?).
+        ---@type number?
+        progress = 0.0,
+        -- The success state.
+        -- (TODO in what format?).
+        ---@type number?
+        success = 0,
+        -- Whether or not the verification is complete.
+        -- (TODO in what format?)
+        ---@type number?
+        verificationCompleted = 0,
+        -- Whether or not the verification was triggered manually.
+        -- (TODO in what format?)
+        ---@type number?
+        manuallyTriggered = 0,
+        -- The filename of the file being verified.
+        ---@type string?
+        filename = "",
+        -- The name of the backend in use.
+        ---@type string?
+        backendName = "",
+        -- The time needed for the verification so far.
+        -- (TODO in what format?)
+        ---@type number?
+        time = 0,
+        -- (TODO what the hell is this for?)
+        ---@type number?
+        verificationNeeded = 0,
+        -- (TODO what the hell is this for?)
+        ---@type string?
+        uri = "",
+        -- The verification stage.
+        ---@type string?
+        stage = "",
+        -- The error message if present.
+        ---@type string?
+        error = ""
+    }
+<
+Log (Request) ~
+Hint (Request) ~
+VerificationNotStarted (Request) ~
+UnhandledViperServerMessage (Request) ~
+GetViperFileEndings (Request) ~
+SetupProject (Request) ~
+GetIdentifier (Request) ~
+GetRange (Request) ~
+
+CLIENT STATE                                           *viper-ide-proto-cstate*
+
+vim:tw=78:ts=8:et:sw=4:ft=help:norl:
