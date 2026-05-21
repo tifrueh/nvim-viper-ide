@@ -15,6 +15,10 @@ USER COMMANDS                                             *viper-ide-commands*
 :LspViperVerify                                                   *:LspVerify*
 
 Start the verification of the current buffer.
+==============================================================================
+SETTINGS                                                  *viper-ide-settings*
+
+[TBA]
 
 ==============================================================================
 LSP COMMAND PROTOCOL                                         *viper-ide-proto*
@@ -205,15 +209,166 @@ Notification: >lua
         error = ""
     }
 <
-Log (Request) ~
-Hint (Request) ~
-VerificationNotStarted (Request) ~
-UnhandledViperServerMessage (Request) ~
+Log (Notification) ~
+
+Notification by the server to log a message.
+
+Notification: >lua
+    {
+        -- The contents of the message.
+        ---@type string
+        data = "",
+        -- The log level.
+        ---@type number
+        logLevel = 0
+    }
+<
+Hint (Notification) ~
+
+Notification by the server to show an informational message to the user.
+
+Notification: >lua
+    {
+        -- The message to show to the user.
+        ---@type string
+        message = "",
+        -- (TODO can this be safely ignored?)
+        ---@type boolean
+        showSettingsButton = false,
+        -- (TODO can this be safely ignored?)
+        ---@type boolean
+        showViperToolsUpdateButton = false
+    }
+<
+VerificationNotStarted (Notification) ~
+
+Notification by the server that the verification could not be started.
+
+Notification: >lua
+    {
+        -- The URI of the file on which the verification could not be started.
+        ---@type string
+        uri = ""
+    }
+<
+UnhandledViperServerMessage (Notification) ~
+
+Notification by the server of an unhandled message type. This is used to
+inform the client that there might be some additional messages that may be
+destined to some extension via the ViperApi.
+
+Note: I'm not sure what this is for and whether this is even relevant for a
+non-VS-Code implementation.
+
+Notification: >lua
+    {
+        -- The message type.
+        ---@type string
+        msgType = "",
+        -- The message itself.
+        ---@type string
+        msg = "",
+        -- The log level.
+        ---@type number
+        logLevel = 0
+    }
+<
 GetViperFileEndings (Request) ~
+
+Note: This request is listed under C2S in the source code of the server, but
+I'm relatively certain that these requests are actually made by the server,
+not the client. I might be misunderstanding something, though ...
+
+Request by the server for the custom file endings specified in the
+configuration.
+
+Request: >lua
+    {
+        -- Not implemented. So I assume no parameters are passed.
+    }
+<
+Response: >lua
+    {
+        -- A list of strings containing the custom file endings.
+        ---@type string[]
+        fileEndings = { "" }
+    }
+<
 SetupProject (Request) ~
+
+Note: This request is listed under C2S in the source code of the server, but
+I'm relatively certain that these requests are actually made by the server,
+not the client. I might be misunderstanding something, though ...
+
+Request by the server that the given file (URI) be pinned to the given
+project.
+
+Request: >lua
+    {
+        -- The project URI.
+        ---@type string
+        projectUri = "",
+        -- Other URIs.
+        -- (TODO what??)
+        ---@type string
+        otherUris = "",
+    }
+<
+Response: >lua
+    {
+        -- Not implemented. So I assume no parameters need to be passed.
+        -- (TODO why is this a request then?)
+    }
+<
+
 GetIdentifier (Request) ~
+
+Note: This request is listed under C2S in the source code of the server, but
+I'm relatively certain that these requests are actually made by the server,
+not the client. I might be misunderstanding something, though ...
+
+Request by the server for the identifier at some location in the current file
+to answer a `gotoDefinition` or `hover` request.
+
+Request: >lua
+    {
+        -- Not implemented. So I assume no parameters are passed.
+        -- (TODO is this asking about the identifier below the current cursor?)
+    }
+<
+Response: >lua
+    {
+        -- The requested identifier.
+        -- (TODO what happens if this is nil?)
+        ---@type string?
+        identifier = ""
+    }
+<
 GetRange (Request) ~
 
+Note: This request is listed under C2S in the source code of the server, but
+I'm relatively certain that these requests are actually made by the server,
+not the client. I might be misunderstanding something, though ...
+
+Request by the server for the text in a range in the current file to answer
+the `signatureHelp` request.
+
+Request: >lua
+    {
+        -- Not implemented. So I assume no parameters are passed.
+        -- (TODO is this asking about the currently selected range?)
+    }
+<
+Response: >lua
+    {
+        -- The requested range
+        ---@type string
+        range = ""
+    }
+<
+
 CLIENT STATE                                           *viper-ide-proto-cstate*
+
+[TBA]
 
 vim:tw=78:ts=8:et:sw=4:ft=help:norl:
