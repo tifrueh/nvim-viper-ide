@@ -5,5 +5,6 @@ return {
     on_attach = function ()
         vim.lsp.buf.document_highlight()
     end,
+    handlers = require('viper-ide.handlers'),
     settings = {},
 }

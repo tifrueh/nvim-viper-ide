@@ -10,6 +10,13 @@ M.init = function ()
     M.viperserver_state = M.se.NOT_STARTED
     -- The SystemObj of the ViperServer itself. Is nil before the server is first started.
     M.viperserver_obj = nil
+    -- The list of file endings that are to be taken as viper files.
+    M.viper_file_endings = { ".vpr", ".sil" }
+    -- The project root URI (will be set by ViperServer on initialisation).
+    M.project_uri = ""
+    -- Other URIs (will be set by ViperServer on initialisation). Not sure what
+    -- this does, though.
+    M.other_uris = ""
 end
 
 return M
