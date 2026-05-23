@@ -1,4 +1,5 @@
 local state = require("viper-ide.state")
+local logger = require("viper-ide.logger")
 
 local M = {}
 
@@ -10,11 +11,16 @@ local function start()
             '--singleClient', '--port', tostring(state.viperserver_port)
         },
         { text = true },
-        function () state.viperserver_state = state.se.STOPPED end
+        function ()
+            state.viperserver_state = state.se.STOPPED
+            logger.warn("ViperServer exited …")
+        end
     )
     state.viperserver = state.se.STARTING
+    logger.info("ViperServer starting …")
     vim.defer_fn(function ()
         if state.viperserver == state.se.STARTING then
+            logger.info("ViperServer started", true)
             state.viperserver_state = state.se.RUNNING
         end
     end,
@@ -29,13 +35,14 @@ M.ensure_started = function ()
     elseif state.viperserver_state == state.se.STARTING then
         vim.wait(1000)
     elseif state.viperserver_state == state.se.STOPPED then
-        vim.notify("[LspViper] ViperServer has stopped, trying to restart …")
+        logger.warn("ViperServer has exited, trying to restart …")
         start()
     end
 end
 
 M.stop = function ()
-        state.viperserver_obj:kill("sigkill")
+    state.viperserver_obj:kill("sigkill")
+    logger.info("ViperServer stopped")
 end
 
 return M
