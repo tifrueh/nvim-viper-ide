@@ -137,7 +137,7 @@ return {
     ["GetLanguageServerUrl"]        = handle_getlanguageserverurl_response,
     ["RemoveDiagnostics"]           = handle_removediagnostics_response,
     ["FlushCache"]                  = handle_flushcache_response,
-    ["StateChange"]                 = handle_statchange_notification,
+    ["StateChange"]                 = handle_statechange_notification,
     ["Log"]                         = handle_log_notification,
     ["Hint"]                        = handle_hint_notification,
     ["VerificationNotStarted"]      = handle_verificationnotstarted_notification,
