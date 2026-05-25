@@ -17,6 +17,8 @@ M.init = function ()
     -- Other URIs (will be set by ViperServer on initialisation). Not sure what
     -- this does, though.
     M.other_uris = ""
+    -- The verification backend to use.
+    M.verification_backend = "silicon"
 end
 
 return M
