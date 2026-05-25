@@ -1,5 +1,7 @@
 local M = {}
 
+M.current_level = vim.log.levels.WARN
+
 local function format(msg, level_str)
     return "[ViperIDE][" .. level_str .. "] " .. msg
 end
