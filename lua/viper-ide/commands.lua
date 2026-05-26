@@ -23,8 +23,27 @@ local run_verify = function (manually_triggered)
     )
 end
 
+local stop_verification = function ()
+    local client = vim.lsp.get_clients({ bufnr = 0, name = "viperserver" })[1]
+    if not client then
+        logger.error("Coult not find LSP client for stopping verification. Is it running?")
+        return
+    end
+    client:request(
+        "StopVerification",
+        {
+            uri = vim.uri_from_bufnr(0)
+        },
+        handlers["StopVerification"]
+    )
+end
+
 M.user_command_verify = function (args)
     run_verify(true)
+end
+
+M.user_command_stop_verification = function (args)
+    stop_verification()
 end
 
 return M

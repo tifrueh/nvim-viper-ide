@@ -33,6 +33,13 @@ M.setup = function ()
             desc = "Run verification on the current buffer."
         }
     )
+    vim.api.nvim_create_user_command(
+        "LspViperStop",
+        function () M.commands.user_command_stop_verification() end,
+        {
+            desc = "Stop the verification of the current buffer."
+        }
+    )
 
     M.logger.info("ViperIDE initialised")
 end
