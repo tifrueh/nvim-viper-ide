@@ -12,7 +12,7 @@ verification command.
 ==============================================================================
 USER COMMANDS                                             *viper-ide-commands*
 
-:LspViperVerify                                                   *:LspVerify*
+:LspViperVerify                                              *:LspViperVerify*
 
 Start the verification of the current buffer.
 

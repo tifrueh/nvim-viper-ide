@@ -27,7 +27,7 @@ M.setup = function ()
 
     M.logger.debug("Registering commands …")
     vim.api.nvim_create_user_command(
-        "LspVerify",
+        "LspViperVerify",
         function () M.commands.user_command_verify() end,
         {
             desc = "Run verification on the current buffer."
