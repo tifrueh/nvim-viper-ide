@@ -162,7 +162,7 @@ SERVER-TO-CLIENT-COMMANDS                                *viper-ide-proto-s2c*
 
 StateChange (Notification) ~
 
-Notification by the server about a state change. See |viper-ide-proto-cstate|.
+Notification by the server about a state change.
 
 Notification: >lua
     {
@@ -366,9 +366,4 @@ Response: >lua
         range = ""
     }
 <
-
-CLIENT STATE                                           *viper-ide-proto-cstate*
-
-[TBA]
-
 vim:tw=78:ts=8:et:sw=4:ft=help:norl:
