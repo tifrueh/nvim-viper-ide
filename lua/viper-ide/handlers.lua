@@ -82,7 +82,7 @@ local function handle_hint_notification(err, result, ctx)
         logger.warn("Got Hint error: " .. err.message)
         return
     end
-    vim.notify("Hint: " .. result.message)
+    vim.info("Hint: " .. result.message)
 end
 
 ---@type vim.lsp.NotificationHandler

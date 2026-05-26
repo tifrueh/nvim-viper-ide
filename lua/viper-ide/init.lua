@@ -25,7 +25,7 @@ M.setup = function ()
     M.logger.current_level = vim.log.levels.DEBUG
     vim.lsp.log.set_level('debug')
 
-    M.logger.debug("Registering commands …")
+    M.logger.trace("Registering commands …")
     vim.api.nvim_create_user_command(
         "LspViperVerify",
         function () M.commands.user_command_verify() end,
@@ -41,7 +41,7 @@ M.setup = function ()
         }
     )
 
-    M.logger.info("ViperIDE initialised")
+    M.logger.debug("ViperIDE initialised")
 end
 
 viper_ide = M

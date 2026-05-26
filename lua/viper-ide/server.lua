@@ -48,10 +48,10 @@ local function start()
         end
     )
     state.viperserver = state.se.STARTING
-    logger.info("ViperServer starting …")
+    logger.trace("ViperServer starting …")
     vim.defer_fn(function ()
         if state.viperserver == state.se.STARTING then
-            logger.info("ViperServer started", true)
+            logger.trace("ViperServer started", true)
             state.viperserver_state = state.se.RUNNING
         end
     end,
@@ -73,7 +73,7 @@ end
 
 M.stop = function ()
     state.viperserver_obj:kill("sigkill")
-    logger.info("ViperServer stopped")
+    logger.trace("ViperServer stopped")
 end
 
 return M
