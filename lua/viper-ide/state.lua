@@ -1,8 +1,12 @@
 local M = {}
 
 M.init = function ()
+    -- The server executable.
+    M.viperserver_exec = "viperserver"
+    -- Extra arguments for the server.
+    M.viperserver_extra_args = {}
+    -- The port to run the server on.
     math.randomseed(os.time())
-    -- The port to run ViperServer on.
     M.viperserver_port = math.random(1100,65535)
     -- "Enum" for executable states.
     M.se = { NOT_STARTED = "0", STARTING = "1", RUNNING = "2", STOPPED = "3" }
@@ -19,6 +23,32 @@ M.init = function ()
     M.other_uris = ""
     -- The verification backend to use.
     M.verification_backend = "silicon"
+    -- The contents used for the JAVA_TOOL_OPTION environment variable.
+    M.java_tool_options = "-Xss128m -Xmx2028m"
+end
+
+-- (Re-)Set settings based on a client config.
+M.set_settings = function (config)
+    if config.settings.viper_file_endings then
+        M.viper_file_endings = config.settings.viper_file_endings
+    end
+    if config.settings.verification_backend then
+        M.verification_backend = config.settings.verification_backend
+    end
+    if config.settings.server_exec then
+        M.viperserver_exec = config.settings.server_exec
+    end
+    if config.settings.server_port then
+        if config.settings.server_port >= 0 then
+            M.viperserver_port = config.settings.server_port
+        end
+    end
+    if config.settings.server_extra_args then
+        M.viperserver_extra_args = config.settings.server_extra_args
+    end
+    if config.settings.java_tool_options then
+        M.java_tool_options = config.settings.java_tool_options
+    end
 end
 
 return M
