@@ -6,18 +6,6 @@ local M = {}
 local stdout_buf = ""
 local stderr_buf = ""
 
-local function flush_stdout ()
-    if stdout_buf == "" then return end
-    logger.debug("[ViperServer][stdout] " .. stdout_buf)
-    stdout_buf = ""
-end
-
-local function flush_stderr ()
-    if stderr_buf == "" then return end
-    logger.warn("[ViperServer][stderr] " .. stderr_buf)
-    stderr_buf = ""
-end
-
 local function start()
     local server_command = {
         state.viperserver_exec,
@@ -34,15 +22,13 @@ local function start()
             stdout = function (err, data)
                 if err then return end
                 if data then
-                    stdout_buf = stdout_buf .. data
-                    vim.schedule(flush_stdout)
+                    logger.debug(data)
                 end
             end,
-            stdin = function (err, data)
+            stderr = function (err, data)
                 if err then return end
                 if data then
-                    stderr_buf = stderr_buf .. data
-                    vim.schedule(flush_stderr)
+                    logger.warn(data)
                 end
             end,
             env = {
