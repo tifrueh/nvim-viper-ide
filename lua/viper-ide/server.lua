@@ -19,12 +19,16 @@ local function flush_stderr ()
 end
 
 local function start()
+    local server_command = {
+        state.viperserver_exec,
+        '--serverMode', 'LSP',
+        '--singleClient', '--port', tostring(state.viperserver_port)
+    }
+    for _,val in ipairs(state.viperserver_extra_args) do
+        table.insert(server_command, val)
+    end
     state.viperserver_obj = vim.system(
-        {
-            'viperserver',
-            '--serverMode', 'LSP',
-            '--singleClient', '--port', tostring(state.viperserver_port)
-        },
+        server_command,
         {
             text = true,
             stdout = function (err, data)
@@ -40,7 +44,10 @@ local function start()
                     stderr_buf = stderr_buf .. data
                     vim.schedule(flush_stderr)
                 end
-            end
+            end,
+            env = {
+                ["JAVA_TOOL_OPTIONS"] = state.java_tool_options
+            }
         },
         function ()
             state.viperserver_state = state.se.STOPPED
