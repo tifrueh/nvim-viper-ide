@@ -23,7 +23,64 @@ Stop the verification of the current buffer.
 ==============================================================================
 SETTINGS                                                  *viper-ide-settings*
 
-[TBA]
+Note: The plugin will read its own configuration directly out of the
+`settings` table of the LSP configuration for `viperserver`, so these options
+should be set there via |vim.lsp.config()|.
+
+viper_file_endings ~
+
+Type: `string[]`
+
+Default: `{ ".vpr", ".sil" }`
+
+The file viper file endings to send to the server if it asks for them.
+
+verification_backend ~
+
+Type: `string`
+
+Default: `{ "silicon" }`
+
+The verification backend to use. Quite certainly supported are `"silicon"` and
+`"carbon"`.
+
+server_exec ~
+
+Type: `string`
+
+Default: `"viperserver"`
+
+The command to issue as the ViperServer executable.
+
+server_port ~
+
+Type: `number`
+
+Default: `-1`
+
+The port to run ViperServer on. Set to a negative number to have the plugin
+select a random one on initialisation.
+
+server_extra_args ~
+
+Type: `string[]`
+
+Default: `{}`
+
+Extra arguments to pass to the ViperServer executable.
+
+Note: It is very much not recommended to set the `--port` option here. Do that
+with the port setting above (except if you know what you're doing and use a
+custom executable or something).
+
+java_tool_options ~
+
+Type: `string`
+
+Default: `"-Xss128m -Xmx2028m"`
+
+The contents of the JAVA_TOOL_OPTIONS environment variable set for the
+ViperServer executable.
 
 ==============================================================================
 LSP COMMAND PROTOCOL                                         *viper-ide-proto*
