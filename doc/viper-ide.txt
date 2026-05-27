@@ -139,8 +139,8 @@ Notification: >lua
         -- The backend to use. Either "silicon" or "carbon".
         ---@type string
         backend = "",
-        -- Contains the path of the fild that should be verified.
-        -- (TODO what??)
+        -- Contains the path of the field that should be verified.
+        -- (Note: I'm not sure what this does, so this plugin never sets this.)
         ---@type string
         customArgs = ""
     }
@@ -231,20 +231,18 @@ Notification: >lua
         -- The new verification state number.
         ---@type number
         newState = 0,
-        -- The new verification progress,
-        -- (TODO in what format?).
+        -- The new verification progress in percents (i.e. 1–100). -1 if no
+        -- progress.
         ---@type number?
         progress = 0.0,
         -- The success state.
-        -- (TODO in what format?).
         ---@type number?
         success = 0,
-        -- Whether or not the verification is complete.
-        -- (TODO in what format?)
+        -- Whether or not the verification is complete. Always 1 or 0.
         ---@type number?
         verificationCompleted = 0,
-        -- Whether or not the verification was triggered manually.
-        -- (TODO in what format?)
+        -- Whether or not the verification was triggered manually. 1 for 'yes',
+        -- 0 for 'no', -1 for 'does not apply'.
         ---@type number?
         manuallyTriggered = 0,
         -- The filename of the file being verified.
@@ -253,14 +251,15 @@ Notification: >lua
         -- The name of the backend in use.
         ---@type string?
         backendName = "",
-        -- The time needed for the verification so far.
-        -- (TODO in what format?)
+        -- The time needed for the verification so far. In seconds, as a
+        -- double.
         ---@type number?
         time = 0,
         -- (TODO what the hell is this for?)
         ---@type number?
         verificationNeeded = 0,
-        -- (TODO what the hell is this for?)
+        -- The URI of the file currently being verified / having been
+        -- verified.
         ---@type string?
         uri = "",
         -- The verification stage.
