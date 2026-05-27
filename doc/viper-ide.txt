@@ -12,12 +12,17 @@ verification command.
 ==============================================================================
 USER COMMANDS                                             *viper-ide-commands*
 
-:LspViperVerify                                              *:LspViperVerify*
+This plugin provides a few user commands for communicating with ViperServer.
+These are given below.
+
+                                                             *:LspViperVerify*
+:LspViperVerify ~
 
 Start the verification of the current buffer. See
 |viper_ide.commands.user_command_verify|.
 
-:LspViperStop                                                  *:LspViperStop*
+                                                               *:LspViperStop*
+:LspViperStop ~
 
 Stop the verification of the current buffer. See
 |viper_ide.commands.user_command_stop_verification|.
@@ -100,87 +105,87 @@ API                                                            *viper-ide-api*
 The plugin — for better or worse — exposes the following functions and
 variables globally.
 
-------------------------------------------------------------------------------
-setup()                                                    *viper_ide.setup()*
+                                                           *viper_ide.setup()*
+setup() ~
 
 Type: `fun(): nil`
 
 Set up the plugin. This should probably not be called manually outside of the
 LSP configuration.
 
-------------------------------------------------------------------------------
-server.ensure_started()                    *viper_ide.server.ensure_started()*
+                                           *viper_ide.server.ensure_started()*
+server.ensure_started() ~
 
 Type: `fun(): nil`
 
 Start ViperServer if it is not running.
 
-------------------------------------------------------------------------------
-server.stop()                                        *viper_ide.server.stop()*
+                                                     *viper_ide.server.stop()*
+server.stop() ~
 
 Type: `fun(): nil`
 
 Stops ViperServer.
 
-------------------------------------------------------------------------------
-logger.trace()                                      *viper_ide.logger.trace()*
+                                                    *viper_ide.logger.trace()*
+logger.trace() ~
 
 Type: `fun(msg: string): nil`
 
 Log a message at `trace` log level.
 
-------------------------------------------------------------------------------
-logger.debug()                                      *viper_ide.logger.debug()*
+                                                    *viper_ide.logger.debug()*
+logger.debug() ~
 
 Type: `fun(msg: string): nil`
 
 Log a message at `debug` log level.
 
-------------------------------------------------------------------------------
-logger.info()                                        *viper_ide.logger.info()*
+                                                     *viper_ide.logger.info()*
+logger.info() ~
 
 Type: `fun(msg: string): nil`
 
 Log a message at `info` log level.
 
-------------------------------------------------------------------------------
-logger.warn()                                        *viper_ide.logger.warn()*
+                                                     *viper_ide.logger.warn()*
+logger.warn() ~
 
 Type: `fun(msg: string): nil`
 
 Log a message at `warn` log level.
 
-------------------------------------------------------------------------------
-logger.error()                                      *viper_ide.logger.error()*
+                                                    *viper_ide.logger.error()*
+logger.error() ~
 
 Type: `fun(msg: string): nil`
 
 Log a message at `error` log level.
 
-------------------------------------------------------------------------------
-logger.progress()                                *viper_ide.logger.progress()*
+                                                 *viper_ide.logger.progress()*
+logger.progress() ~
 
 Type: `fun(msg: string, percent: number, status: string): nil`
 
 Update the progress to `percent`% with message `msg` and status `status`,
 where `status` should be one of |viper_ide.logger.ps|.
 
-------------------------------------------------------------------------------
-logger.get_level()                              *viper_ide.logger.get_level()*
+                                                *viper_ide.logger.get_level()*
+logger.get_level() ~
 
 Type: `fun(): number
 
 Retrieve the current logging level. Will be one of the |vim.log.levels|.
 
-------------------------------------------------------------------------------
-logger.set_level()                              *viper_ide.logger.set_level()*
+                                                *viper_ide.logger.set_level()*
+logger.set_level() ~
 
 Type: `fun(level: number): nil
 
 Set the current logging level. `level` should be one of the |vim.log.levels|.
 
-------------------------------------------------------------------------------
-logger.ps                                                *viper_ide.logger.ps*
+                                                         *viper_ide.logger.ps*
+logger.ps ~
 
 A table that is intended to be used as a enum-like structure for a progress
 status in |nvim_echo()|. Available values are: >
@@ -189,18 +194,18 @@ status in |nvim_echo()|. Available values are: >
     logger.ps.FAILED
     logger.ps.CANCEL
 <
-------------------------------------------------------------------------------
-commands.user_command_verify()      *viper_ide.commands.user_command_verify()*
+                                    *viper_ide.commands.user_command_verify()*
+commands.user_command_verify() ~
 
 Type: `fun(): nil`
 
 Start verification of the current buffer. This function is what
 |:LspViperVerify| binds to.
 
-------------------------------------------------------------------------------
-commands.user_command_stop_verification()
 
                          *viper_ide.commands.user_command_stop_verification()*
+
+commands.user_command_stop_verification() ~
 
 Type: `fun(): nil`
 
