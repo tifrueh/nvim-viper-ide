@@ -1,6 +1,12 @@
 local M = {}
 
 M.current_level = vim.log.levels.WARN
+M.ps = {
+    SUCCESS = "success",
+    RUNNING = "running",
+    FAILED = "failed",
+    CANCEL = "cancel"
+}
 
 local function format(msg, level_str)
     return "[ViperIDE][" .. level_str .. "] " .. msg
@@ -34,6 +40,19 @@ M.error = function (msg)
     if M.current_level <= vim.log.levels.ERROR then
         vim.notify(format(msg, "ERROR"), vim.log.levels.ERROR)
     end
+end
+
+M.progress = function (msg, percent, status)
+    vim.api.nvim_echo(
+        {{ msg }},
+        true,
+        {
+            kind = "progress",
+            percent = percent,
+            source = "ViperIDE",
+            status = status
+        }
+    )
 end
 
 return M

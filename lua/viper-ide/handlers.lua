@@ -1,6 +1,38 @@
 logger = require("viper-ide.logger")
 state = require("viper-ide.state")
 
+-- HELPERS =====================================================================
+
+-- Mirrors "VerificationState" in "ViperProtocol.ts" of the official Viper IDE.
+local verification_state = {
+    Stopped = 0,
+    Starting = 1,
+    VerificationRunning = 2,
+    VerificationPrintingHelp = 3,
+    VerificationReporting = 4,
+    PostProcessing = 5,
+    Ready = 6,
+    Stopping = 7,
+    Stage = 8,
+    ConstructingAst = 9
+}
+
+-- Mirrors "Success" in "ViperProtocol.ts" of the official Viper IDE.
+local success = {
+    -- Used for initialization
+    None = 0,
+    Success = 1,
+    ParsingFailed = 2,
+    TypecheckingFailed = 3,
+    VerificationFailed = 4,
+    -- Manually aborted verification
+    Aborted = 5,
+    -- Caused by internal error
+    Error = 6,
+    -- Caused by verification taking too long
+    Timeout = 7
+}
+
 -- CLIENT TO SERVER RESPONSE HANDLERS ==========================================
 
 ---@type vim.lsp.ResponseHandler
@@ -63,8 +95,40 @@ local function handle_statechange_notification(err, result, ctx)
         logger.warn("Got StateChange error: " .. err.message)
         return
     end
-    logger.info("Got StateChange: " .. vim.print(result))
-    -- TODO Implement the whole local state thing.
+    logger.debug("Got StateChange")
+    -- Normalise invalid progresses to zero.
+    if result.progress > 100 or result.progress < 0 then
+        result.progress = 0
+    end
+    if result.newState == verification_state.Starting then
+        logger.progress("Verification starting …", result.progress, logger.ps.RUNNING)
+    elseif result.newState == verification_state.VerificationRunning then
+        logger.progress("Verification running …", result.progress, logger.ps.RUNNING)
+    elseif result.newState == verification_state.PostProcessing then
+        logger.progress("Post-processing …", result.progress, logger.ps.RUNNING)
+    elseif result.newState == verification_state.Stage then
+        logger.progess("Running " .. result.stage .. " for " .. result.uri, result.progress, logger.ps.RUNNING)
+    elseif result.newState == verification_state.Ready then
+        if result.verificationCompleted == 0 then
+            logger.progress("Ready …", result.progress, logger.ps.RUNNING)
+            return
+        end
+        if result.success == success.Success then
+            logger.progress("Verified " .. result.uri, 100, logger.ps.SUCCESS)
+        elseif result.success == success.ParsingFailed then
+            logger.progress("Parsing " .. result.uri .. " failed", result.progress, logger.ps.FAILED)
+        elseif result.success == success.TypeCheckingFailed then
+            logger.progress("Typechecking " .. result.uri .. " failed", result.progress, logger.ps.FAILED)
+        elseif result.success == success.VerificationFailed then
+            logger.progress("Verifying " .. result.uri .. " failed", result.progress, logger.ps.FAILED)
+        elseif result.success == success.Aborted then
+            logger.progress("Verification aborted", result.progress, logger.ps.FAILED)
+        elseif result.success == success.Error then
+            logger.progress("Internal error …", result.progress, logger.ps.FAILED)
+        elseif result.success == success.Timeout then
+            logger.progress("Verification timed out …", result.progress, logger.ps.FAILED)
+        end
+    end
 end
 
 ---@type vim.lsp.NotificationHandler
