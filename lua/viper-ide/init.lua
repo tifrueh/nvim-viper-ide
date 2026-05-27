@@ -22,9 +22,6 @@ M.setup = function ()
     M.logger.trace("Initialising state …")
     M.state.init()
 
-    M.logger.current_level = vim.log.levels.DEBUG
-    vim.lsp.log.set_level('debug')
-
     M.logger.trace("Registering commands …")
     vim.api.nvim_create_user_command(
         "LspViperVerify",
