@@ -137,7 +137,7 @@ local function handle_log_notification(err, result, ctx)
         logger.warn("Got Log error: " .. err.message)
         return
     end
-    logger.info("[ViperServer][" .. result.logLevel .."] " .. result.data)
+    logger.debug("[ViperServer][" .. result.logLevel .."] " .. result.data)
 end
 
 ---@type vim.lsp.NotificationHandler
