@@ -5,6 +5,15 @@ implementation for Neovim.
 
 For further documentation, see `doc/viper-ide.txt`.
 
+## Installation
+
+To install this plugin, add the following line somewhere in your Neovim
+configuration:
+
+```lua
+vim.pack.add({ "https://github.com/tifrueh/nvim-viper-ide.git" })
+```
+
 ## Note
 
 This plugin is heavily inspired by
