@@ -48,7 +48,7 @@ M.init = function ()
     -- The verification backend to use.
     M.verification_backend = "silicon"
     -- The contents used for the JAVA_TOOL_OPTION environment variable.
-    M.java_tool_options = "-Xss128m -Xmx2028m"
+    M.java_tool_options = nil
 
     -- Use the settings table of the LSP config to (re-)set settings.
     local config = vim.lsp.get_configs({ filetype = "viper" })[1]

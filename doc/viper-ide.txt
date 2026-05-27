@@ -75,9 +75,9 @@ custom executable or something).
 
 java_tool_options ~
 
-Type: `string`
+Type: `string?`
 
-Default: `"-Xss128m -Xmx2028m"`
+Default: `nil`
 
 The contents of the JAVA_TOOL_OPTIONS environment variable set for the
 ViperServer executable.
