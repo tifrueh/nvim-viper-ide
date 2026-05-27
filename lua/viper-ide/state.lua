@@ -1,5 +1,29 @@
 local M = {}
 
+-- (Re-)Set settings based on a client config.
+local function set_settings (config)
+    if config.settings.viper_file_endings then
+        M.viper_file_endings = config.settings.viper_file_endings
+    end
+    if config.settings.verification_backend then
+        M.verification_backend = config.settings.verification_backend
+    end
+    if config.settings.server_exec then
+        M.viperserver_exec = config.settings.server_exec
+    end
+    if config.settings.server_port then
+        if config.settings.server_port >= 0 then
+            M.viperserver_port = config.settings.server_port
+        end
+    end
+    if config.settings.server_extra_args then
+        M.viperserver_extra_args = config.settings.server_extra_args
+    end
+    if config.settings.java_tool_options then
+        M.java_tool_options = config.settings.java_tool_options
+    end
+end
+
 M.init = function ()
     -- The server executable.
     M.viperserver_exec = "viperserver"
@@ -25,30 +49,10 @@ M.init = function ()
     M.verification_backend = "silicon"
     -- The contents used for the JAVA_TOOL_OPTION environment variable.
     M.java_tool_options = "-Xss128m -Xmx2028m"
-end
 
--- (Re-)Set settings based on a client config.
-M.set_settings = function (config)
-    if config.settings.viper_file_endings then
-        M.viper_file_endings = config.settings.viper_file_endings
-    end
-    if config.settings.verification_backend then
-        M.verification_backend = config.settings.verification_backend
-    end
-    if config.settings.server_exec then
-        M.viperserver_exec = config.settings.server_exec
-    end
-    if config.settings.server_port then
-        if config.settings.server_port >= 0 then
-            M.viperserver_port = config.settings.server_port
-        end
-    end
-    if config.settings.server_extra_args then
-        M.viperserver_extra_args = config.settings.server_extra_args
-    end
-    if config.settings.java_tool_options then
-        M.java_tool_options = config.settings.java_tool_options
-    end
+    -- Use the settings table of the LSP config to (re-)set settings.
+    local config = vim.lsp.get_configs({ filetype = "viper" })[1]
+    set_settings(config)
 end
 
 return M
