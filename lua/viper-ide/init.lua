@@ -1,6 +1,6 @@
 local M = {}
 
-M.state = require("viper-ide.state")
+local state = require("viper-ide.state")
 M.server = require("viper-ide.server")
 M.logger = require("viper-ide.logger")
 M.commands = require("viper-ide.commands")
@@ -20,7 +20,7 @@ M.setup = function ()
     )
 
     M.logger.trace("Initialising state …")
-    M.state.init()
+    state.init()
 
     M.logger.trace("Registering commands …")
     vim.api.nvim_create_user_command(
