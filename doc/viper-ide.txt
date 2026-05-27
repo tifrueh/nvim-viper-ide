@@ -83,6 +83,16 @@ The contents of the JAVA_TOOL_OPTIONS environment variable set for the
 ViperServer executable.
 
 ==============================================================================
+NOTE ON LOGGING                                            *viper-ide-logging*
+
+The plugin logs directly to |:messages|, and its logging level is directly
+coupled to the LSP logging level given by |vim.lsp.log.get_level()|.
+
+If you want to change the logging level of the plugin at runtime, and want to
+keep it in sync with the LSP logging level, use the
+|viper_ide.logger.set_level()| function.
+
+==============================================================================
 LSP COMMAND PROTOCOL                                         *viper-ide-proto*
 
 Note: This is an unofficial documentation of the non-standard LSP commands of
